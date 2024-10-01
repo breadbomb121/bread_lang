@@ -1,0 +1,33 @@
+WHITESPACE = _{" " | "\t" | NEWLINE}
+program = {SOI ~ statement* ~ EOI}
+
+statement = _{function | inline_statement}
+	inline_statement = _{ (return | print | assignment | reassignment | expression | identifier) ~ ";"}
+		assignment = {"let" ~ identifier ~ "=" ~ expression}
+		print = {"print" ~ expression}
+		reassignment = {identifier ~ "=" ~ expression}
+//Definitions for functions
+	function = {"fn" ~ identifier ~ "(" ~ parameters ~ ")" ~ "{" ~ block ~ "}" }
+		parameters = {identifier*}
+		block = { statement* }
+
+	function_call = {identifier ~ "(" ~ arguments ~ ")"}
+		arguments = { (expression ~ ("," ~ expression)*)? }
+		return = {"return" ~ expression}
+
+
+//Parsing expression
+expression = { prefix* ~  primary ~ (infix ~ prefix* ~ primary)* }
+	infix = _{add | sub | mul | div | mod}
+		add = {"+"}
+		sub = {"-"}
+		mul = {"*"}
+		div = {"/"}
+		mod = {"%"}
+	prefix = _{neg}
+		neg = {"-"}
+	primary = _{identifier | int | "(" ~ expression ~ ")"}
+
+identifier = @{ASCII_ALPHA ~ ASCII_ALPHANUMERIC*}
+int = @{ (ASCII_NONZERO_DIGIT ~ ASCII_DIGIT+ | ASCII_DIGIT) }
+

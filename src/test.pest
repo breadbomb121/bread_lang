@@ -31,19 +31,3 @@ expression = { prefix* ~  primary ~ (infix ~ prefix* ~ primary)* }
 identifier = @{ASCII_ALPHA ~ ASCII_ALPHANUMERIC*}
 int = @{ (ASCII_NONZERO_DIGIT ~ ASCII_DIGIT+ | ASCII_DIGIT) }
 
-
-
-//Extended Expression Grammar
-literal = { int }
-e_expression = { binary_expr | unary_expr | literal }
-	unary_expr = {unary_prefix_operator ~ literal}
-		unary_operator = _{neg}
-			neg = {"-"}
-	binary_expr = {e_expression ~ binary_operator ~ e_expression}
-		binary_operator = {add | sub | mul | div | mod}
-			add = {"+"}
-			sub = {"-"}
-			mul = {"*"}
-			div = {"/"}
-			mod = {"%"}
-
